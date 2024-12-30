@@ -1,0 +1,169 @@
+<PROGR id="1" type="PROGR" children="2,">
+<ALGO id="2" type="ALGO" children="3,15,">
+<INSTR id="3" type="INSTR" children="4,">
+<ASSIGN id="4" type="ASSIGN" children="5,8,">
+<NUMVAR id="5" type="NUMVAR" children="6,7,">
+<D id="6" type="D">
+1
+</D>
+<D id="7" type="D">
+2
+</D>
+</NUMVAR>
+<DECNUM id="8" type="DECNUM" children="9,">
+<POS id="9" type="POS" children="10,11,12,13,14,">
+<D id="10" type="D">
+1
+</D>
+<D id="11" type="D">
+2
+</D>
+<D id="12" type="D">
+3.
+</D>
+<D id="13" type="D">
+0
+</D>
+<D id="14" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ASSIGN>
+</INSTR>
+<ALGO id="15" type="ALGO" children="16,28,63,">
+<INSTR id="16" type="INSTR" children="17,">
+<ASSIGN id="17" type="ASSIGN" children="18,21,">
+<NUMVAR id="18" type="NUMVAR" children="19,20,">
+<D id="19" type="D">
+2
+</D>
+<D id="20" type="D">
+4
+</D>
+</NUMVAR>
+<DECNUM id="21" type="DECNUM" children="22,">
+<POS id="22" type="POS" children="23,24,25,26,27,">
+<D id="23" type="D">
+3
+</D>
+<D id="24" type="D">
+2
+</D>
+<D id="25" type="D">
+9.
+</D>
+<D id="26" type="D">
+0
+</D>
+<D id="27" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ASSIGN>
+</INSTR>
+<ALGO id="28" type="ALGO" children="29,">
+<INSTR id="29" type="INSTR" children="30,">
+<BRANCH id="30" type="BRANCH" children="31,38,">
+<LESSTHAN id="31" type="CMPR_LESSTHAN" children="32,35,">
+<NUMVAR id="32" type="NUMVAR" children="33,34,">
+<D id="33" type="D">
+1
+</D>
+<D id="34" type="D">
+2
+</D>
+</NUMVAR>
+<NUMVAR id="35" type="NUMVAR" children="36,37,">
+<D id="36" type="D">
+2
+</D>
+<D id="37" type="D">
+4
+</D>
+</NUMVAR>
+</LESSTHAN>
+<ALGO id="38" type="ALGO" children="39,46,">
+<INSTR id="39" type="INSTR" children="40,">
+<ASSIGN id="40" type="ASSIGN" children="41,43,">
+<NUMVAR id="41" type="NUMVAR" children="42,">
+<D id="42" type="D">
+3
+</D>
+</NUMVAR>
+<NUMVAR id="43" type="NUMVAR" children="44,45,">
+<D id="44" type="D">
+1
+</D>
+<D id="45" type="D">
+2
+</D>
+</NUMVAR>
+</ASSIGN>
+</INSTR>
+<ALGO id="46" type="ALGO" children="47,55,">
+<INSTR id="47" type="INSTR" children="48,">
+<ASSIGN id="48" type="ASSIGN" children="49,52,">
+<NUMVAR id="49" type="NUMVAR" children="50,51,">
+<D id="50" type="D">
+1
+</D>
+<D id="51" type="D">
+2
+</D>
+</NUMVAR>
+<NUMVAR id="52" type="NUMVAR" children="53,54,">
+<D id="53" type="D">
+2
+</D>
+<D id="54" type="D">
+4
+</D>
+</NUMVAR>
+</ASSIGN>
+</INSTR>
+<ALGO id="55" type="ALGO" children="56,">
+<INSTR id="56" type="INSTR" children="57,">
+<ASSIGN id="57" type="ASSIGN" children="58,61,">
+<NUMVAR id="58" type="NUMVAR" children="59,60,">
+<D id="59" type="D">
+2
+</D>
+<D id="60" type="D">
+4
+</D>
+</NUMVAR>
+<NUMVAR id="61" type="NUMVAR" children="62,">
+<D id="62" type="D">
+3
+</D>
+</NUMVAR>
+</ASSIGN>
+</INSTR>
+</ALGO>
+</ALGO>
+</ALGO>
+</BRANCH>
+</INSTR>
+</ALGO>
+<ALGO id="63" type="ALGO" children="64,68,">
+<INSTR id="64" type="INSTR" children="65,">
+<OUTPUT_VALUE id="65" type="OUTPUT" children="66,">
+<NUMVAR id="66" type="NUMVAR" children="67,">
+<D id="67" type="D">
+3
+</D>
+</NUMVAR>
+</OUTPUT_VALUE>
+</INSTR>
+<ALGO id="68" type="ALGO" children="69,">
+<INSTR id="69" type="INSTR" children="70,">
+<HALT id="70" type="HALT">
+</HALT>
+</INSTR>
+</ALGO>
+</ALGO>
+</ALGO>
+</ALGO>
+</PROGR>
