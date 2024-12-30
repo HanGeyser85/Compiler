@@ -1,6 +1,6 @@
 # SPL Grammar in CFG
 
-Below is a **Context-Free Grammar (CFG)** for your SPL language, reflecting how your **lexer** (single-character tokens) and **parser** (recursive-descent) currently behave. The terminals match the single-letter tokens from the lexer (e.g., `'p'` for `PROC`, `'n'` for `NUMVAR`, etc.). Multi-character tokens like `":="`, string literals, and comments are also represented as single terminals (since the lexer generates them as single tokens).
+Below is a **Context-Free Grammar (CFG)** for a SPL language, reflecting how your **lexer** (single-character tokens) and **parser** (recursive-descent) currently behave. The terminals match the single-letter tokens from the lexer (e.g., `'p'` for `PROC`, `'n'` for `NUMVAR`, etc.). Multi-character tokens like `":="`, string literals, and comments are also represented as single terminals (since the lexer generates them as single tokens).
 
 ---
 
