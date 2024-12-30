@@ -1,17 +1,33 @@
-p1{
-  g n1;
-  n2 := 10;
-  n3 := 0;
-
-  w(n2 > 0){
-    i((n2 % 2) == 0) t {
-      n3 := n3 + n2;
-    } e {
-      n3 := n3 - n2;
-    };
-    n2 := n2 - 1;
+*TestCommentHere*
+b5:=T;
+n5:=10.00;
+*AnotherComment1*
+r s5;
+*FinalCommentMad*
+, p1 {
+  n1:=3.00;
+  s2:="HelloSPLStrng12";
+  i(b5) t {
+    n1:=m(n1,2.00);
+    r s2;
+  } e {
+    n1:=d(n1,1.00);
   };
-
-  o n3;
-  h;
+  c p2;
+  o n1;
+  h
+}
+,
+p2 {
+  g n2;
+  w(b5){
+    n2:=a(n2,5.00);
+  };
+  i(v(b5,T)) t {
+    n5:=m(n5,n2);
+  } e {
+    n5:=d(n5,2.00);
+  };
+  o n5;
+  h
 }
