@@ -15,7 +15,7 @@ public class ASTNode {
         this.content = content;
     }
 
-    List<ASTNode> children = new ArrayList<ASTNode>();
+    List<ASTNode> children = new ArrayList<>();
     public ASTNode(String value, _TokenType type, Integer number) {
         this.value = value;
         this.type = type;
