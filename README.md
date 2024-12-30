@@ -251,7 +251,3 @@ Comment -> * Characters *
 Brackets -> { Algorithm }
 Parentheses -> ( BooleanExpression )
 ```
-
----
-
-This updated grammar includes explicit definitions for associativity and precedence to resolve ambiguities in `Expressions`, `Algorithm`, and `BooleanExpressions`. Let me know if more details are needed!
