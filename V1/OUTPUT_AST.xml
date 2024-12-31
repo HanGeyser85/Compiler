@@ -1,1 +1,287 @@
-Expected PROGR, got COMMENT
+<PROGR id="1" type="PROGR" children="2,21,">
+<ALGO id="2" type="ALGO" children="3,9,">
+<INSTR id="3" type="INSTR" children="4,">
+<ASSIGN id="4" type="ASSIGN" children="5,8,">
+<BOOLVAR id="5" type="BOOLVAR" children="6,7,">
+<D id="6" type="D">
+1
+</D>
+<D id="7" type="D">
+0
+</D>
+</BOOLVAR>
+<FALSE id="8" type="LOGIC_FALSE">
+</FALSE>
+</ASSIGN>
+</INSTR>
+<ALGO id="9" type="ALGO" children="10,">
+<INSTR id="10" type="INSTR" children="11,">
+<ASSIGN id="11" type="ASSIGN" children="12,15,">
+<NUMVAR id="12" type="NUMVAR" children="13,14,">
+<D id="13" type="D">
+1
+</D>
+<D id="14" type="D">
+0
+</D>
+</NUMVAR>
+<DECNUM id="15" type="DECNUM" children="16,">
+<POS id="16" type="POS" children="17,18,19,20,">
+<D id="17" type="D">
+2
+</D>
+<D id="18" type="D">
+5.
+</D>
+<D id="19" type="D">
+0
+</D>
+<D id="20" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ASSIGN>
+</INSTR>
+</ALGO>
+</ALGO>
+<PROCDEFS id="21" type="PROCDEFS" children="22,86,">
+<PROC id="22" type="PROC" children="23,24,">
+<D id="23" type="D">
+1
+</D>
+<PROGR id="24" type="PROGR" children="25,">
+<ALGO id="25" type="ALGO" children="26,31,">
+<INSTR id="26" type="INSTR" children="27,">
+<ASSIGN id="27" type="ASSIGN" children="28,30,">
+<BOOLVAR id="28" type="BOOLVAR" children="29,">
+<D id="29" type="D">
+1
+</D>
+</BOOLVAR>
+<TRUE id="30" type="LOGIC_TRUE">
+</TRUE>
+</ASSIGN>
+</INSTR>
+<ALGO id="31" type="ALGO" children="32,41,">
+<INSTR id="32" type="INSTR" children="33,">
+<ASSIGN id="33" type="ASSIGN" children="34,36,">
+<NUMVAR id="34" type="NUMVAR" children="35,">
+<D id="35" type="D">
+1
+</D>
+</NUMVAR>
+<DECNUM id="36" type="DECNUM" children="37,">
+<POS id="37" type="POS" children="38,39,40,">
+<D id="38" type="D">
+5.
+</D>
+<D id="39" type="D">
+0
+</D>
+<D id="40" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ASSIGN>
+</INSTR>
+<ALGO id="41" type="ALGO" children="42,73,">
+<INSTR id="42" type="INSTR" children="43,">
+<BRANCH id="43" type="BRANCH" children="44,46,59,">
+<BOOLVAR id="44" type="BOOLVAR" children="45,">
+<D id="45" type="D">
+1
+</D>
+</BOOLVAR>
+<ALGO id="46" type="ALGO" children="47,">
+<INSTR id="47" type="INSTR" children="48,">
+<ASSIGN id="48" type="ASSIGN" children="49,51,">
+<NUMVAR id="49" type="NUMVAR" children="50,">
+<D id="50" type="D">
+1
+</D>
+</NUMVAR>
+<ADDITION id="51" type="NUMEXPR_ADDITION" children="52,54,">
+<NUMVAR id="52" type="NUMVAR" children="53,">
+<D id="53" type="D">
+1
+</D>
+</NUMVAR>
+<DECNUM id="54" type="DECNUM" children="55,">
+<POS id="55" type="POS" children="56,57,58,">
+<D id="56" type="D">
+3.
+</D>
+<D id="57" type="D">
+0
+</D>
+<D id="58" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ADDITION>
+</ASSIGN>
+</INSTR>
+</ALGO>
+<ELSE id="59" type="ELSE" children="60,">
+<ALGO id="60" type="ALGO" children="61,">
+<INSTR id="61" type="INSTR" children="62,">
+<ASSIGN id="62" type="ASSIGN" children="63,65,">
+<NUMVAR id="63" type="NUMVAR" children="64,">
+<D id="64" type="D">
+1
+</D>
+</NUMVAR>
+<ADDITION id="65" type="NUMEXPR_ADDITION" children="66,68,">
+<NUMVAR id="66" type="NUMVAR" children="67,">
+<D id="67" type="D">
+1
+</D>
+</NUMVAR>
+<DECNUM id="68" type="DECNUM" children="69,">
+<POS id="69" type="POS" children="70,71,72,">
+<D id="70" type="D">
+1.
+</D>
+<D id="71" type="D">
+0
+</D>
+<D id="72" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ADDITION>
+</ASSIGN>
+</INSTR>
+</ALGO>
+</ELSE>
+</BRANCH>
+</INSTR>
+<ALGO id="73" type="ALGO" children="74,78,">
+<INSTR id="74" type="INSTR" children="75,">
+<OUTPUT_VALUE id="75" type="OUTPUT" children="76,">
+<NUMVAR id="76" type="NUMVAR" children="77,">
+<D id="77" type="D">
+1
+</D>
+</NUMVAR>
+</OUTPUT_VALUE>
+</INSTR>
+<ALGO id="78" type="ALGO" children="79,83,">
+<INSTR id="79" type="INSTR" children="80,">
+<OUTPUT_TEXT_RESPONSE id="80" type="OUTPUT" children="81,">
+<STRINGV id="81" type="STRINGV" children="82,">
+1
+<D id="82" type="D">
+1
+</D>
+</STRINGV>
+</OUTPUT_TEXT_RESPONSE>
+</INSTR>
+<ALGO id="83" type="ALGO" children="84,">
+<INSTR id="84" type="INSTR" children="85,">
+<HALT id="85" type="HALT">
+</HALT>
+</INSTR>
+</ALGO>
+</ALGO>
+</ALGO>
+</ALGO>
+</ALGO>
+</ALGO>
+</PROGR>
+</PROC>
+<PROCDEFS id="86" type="PROCDEFS" children="87,">
+<PROC id="87" type="PROC" children="88,89,">
+<D id="88" type="D">
+2
+</D>
+<PROGR id="89" type="PROGR" children="90,">
+<ALGO id="90" type="ALGO" children="91,111,">
+<INSTR id="91" type="INSTR" children="92,">
+<LOOP id="92" type="LOOP" children="93,96,">
+<BOOLVAR id="93" type="BOOLVAR" children="94,95,">
+<D id="94" type="D">
+1
+</D>
+<D id="95" type="D">
+0
+</D>
+</BOOLVAR>
+<ALGO id="96" type="ALGO" children="97,">
+<INSTR id="97" type="INSTR" children="98,">
+<ASSIGN id="98" type="ASSIGN" children="99,102,">
+<NUMVAR id="99" type="NUMVAR" children="100,101,">
+<D id="100" type="D">
+1
+</D>
+<D id="101" type="D">
+0
+</D>
+</NUMVAR>
+<ADDITION id="102" type="NUMEXPR_ADDITION" children="103,106,">
+<NUMVAR id="103" type="NUMVAR" children="104,105,">
+<D id="104" type="D">
+1
+</D>
+<D id="105" type="D">
+0
+</D>
+</NUMVAR>
+<DECNUM id="106" type="DECNUM" children="107,">
+<POS id="107" type="POS" children="108,109,110,">
+<D id="108" type="D">
+1.
+</D>
+<D id="109" type="D">
+0
+</D>
+<D id="110" type="D">
+0
+</D>
+</POS>
+</DECNUM>
+</ADDITION>
+</ASSIGN>
+</INSTR>
+</ALGO>
+</LOOP>
+</INSTR>
+<ALGO id="111" type="ALGO" children="112,115,">
+<INSTR id="112" type="INSTR" children="113,">
+<CALL id="113" type="CALL" children="114,">
+<D id="114" type="D">
+1
+</D>
+</CALL>
+</INSTR>
+<ALGO id="115" type="ALGO" children="116,121,">
+<INSTR id="116" type="INSTR" children="117,">
+<OUTPUT_VALUE id="117" type="OUTPUT" children="118,">
+<NUMVAR id="118" type="NUMVAR" children="119,120,">
+<D id="119" type="D">
+1
+</D>
+<D id="120" type="D">
+0
+</D>
+</NUMVAR>
+</OUTPUT_VALUE>
+</INSTR>
+<ALGO id="121" type="ALGO" children="122,">
+<INSTR id="122" type="INSTR" children="123,">
+<HALT id="123" type="HALT">
+</HALT>
+</INSTR>
+</ALGO>
+</ALGO>
+</ALGO>
+</ALGO>
+</PROGR>
+</PROC>
+</PROCDEFS>
+</PROCDEFS>
+</PROGR>
