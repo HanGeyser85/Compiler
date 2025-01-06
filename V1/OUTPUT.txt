@@ -1,24 +1,10 @@
-1 LET B10 = 0
-2 LET N10 = 25.00
-3 END
-4 REM The end is th ensure that the program does not run into the subroutine unless called!
-5001 REM 5001
-5 LET B10 = 1
-6 STOP
-7 RETURN
-8 END
-9 REM The end is th ensure that the program does not run into the subroutine unless called!
-5002 REM 5002
-3003 REM 3003
-3004 REM 3004
-10 LET N10 = N10 + 1.00
-11 GOTO 3003
-3005 REM 3005
-12 GOSUB 5001
-13 PRINT N10
-14 END
-15 REM The end is th ensure that the program does not run into the subroutine unless called!
-5003 REM 5003
-16 LET B11 = 1
-17 RETURN
-18 RETURN
+1 LET N12 = 123.00
+2 LET N24 = 329.00
+8005 IF N12 > N24 THEN GOTO 7005
+7004 REM 7004
+3 LET N3 = N12
+4 LET N12 = N24
+5 LET N24 = N3
+7005 REM 7005
+6 PRINT N3
+7 STOP

@@ -1,8 +1,10 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Scope {
+
     String name;
     Scope parent;
     HashMap<Integer, Symbol> siblings = new HashMap<>();
@@ -18,7 +20,7 @@ public class Scope {
         this.parent = parent;
     }
 
-    public Scope (Scope scope) {
+    public Scope(Scope scope) {
         this.name = scope.name;
         this.parent = scope.parent;
         this.siblings = scope.siblings;
@@ -58,16 +60,16 @@ public class Scope {
             var.isVisibleToChild = !var.isFromParent;
 
             System.out.println(this.name);
-            
+
             if (!hasProc(nameString) || !var.isFromParent) {
                 ids.add(node.number);
                 addSymbol(var, node.number);
             } else {
-                throw new RuntimeException("Procedure " + nameString + " not allowed in the scope of "+ this.name +" as it already exists.");
+                throw new RuntimeException("Procedure " + nameString + " not allowed in the scope of " + this.name + " as it already exists.");
             }
-             
+
             return;
-        } 
+        }
 
         if (node.type == _TokenType.BOOLVAR) {
             String nameString = "";
@@ -88,7 +90,7 @@ public class Scope {
                         var.isFromParent = true;
                         var.isVisibleToChild = false;
                     } else {
-                        throw new RuntimeException("BoolVar " + nameString + " not allowed in the scope of "+ this.name +" as it already exists.");
+                        throw new RuntimeException("BoolVar " + nameString + " not allowed in the scope of " + this.name + " as it already exists.");
                     }
                 } else {
                     var.isFromParent = false;
@@ -112,9 +114,9 @@ public class Scope {
             } else if (hasVar(nameString, _TokenType.BOOLVAR) && !var.isFromParent) {
                 return;
             }
-             
+
             return;
-        } 
+        }
 
         if (node.type == _TokenType.NUMVAR) {
             String nameString = "";
@@ -135,7 +137,7 @@ public class Scope {
                         var.isFromParent = true;
                         var.isVisibleToChild = false;
                     } else {
-                        throw new RuntimeException("Number " + nameString + " not allowed in the scope of "+ this.name +" as it already exists.");
+                        throw new RuntimeException("Number " + nameString + " not allowed in the scope of " + this.name + " as it already exists.");
                     }
                 } else {
                     var.isFromParent = false;
@@ -159,9 +161,9 @@ public class Scope {
             } else if (hasVar(nameString, _TokenType.NUMVAR) && !var.isFromParent) {
                 return;
             }
-             
+
             return;
-        } 
+        }
 
         if (node.type == _TokenType.STRINGV) {
             String nameString = "";
@@ -174,14 +176,14 @@ public class Scope {
 
             var.name = nameString;
             var.type = _TokenType.STRINGV;
-            
+
             if (parent != null) {
                 if (parent.hasVar(nameString, var.type)) {
                     if (parent.isVisibleToChild(nameString, var.type)) {
                         var.isFromParent = false;
                         var.isVisibleToChild = true;
                     } else {
-                        throw new RuntimeException("String " + nameString + " not allowed in the scope of "+ this.name +" as it already exists.");
+                        throw new RuntimeException("String " + nameString + " not allowed in the scope of " + this.name + " as it already exists.");
                     }
                 } else {
                     var.isFromParent = false;
@@ -205,11 +207,11 @@ public class Scope {
             } else if (hasVar(nameString, _TokenType.STRINGV) && !var.isFromParent) {
                 return;
             }
-             
+
             return;
-        } 
-        
-        if (node.type == _TokenType.CALL) { 
+        }
+
+        if (node.type == _TokenType.CALL) {
             String nameString = "";
 
             for (ASTNode astNode : node.children) {
@@ -226,13 +228,13 @@ public class Scope {
             System.out.println(this.name);
 
             this.calls.put(node.number, var);
-            
+
             return;
         }
-        
-        for (ASTNode  child : node.children) {
+
+        for (ASTNode child : node.children) {
             populateTable(child);
-        }       
+        }
     }
 
     private void addSymbol(Symbol var, Integer number) {
@@ -243,7 +245,6 @@ public class Scope {
     public void addSibling(Symbol var, Integer id) {
         siblings.put(id, var);
     }
-
 
     public String toHTML() {
         String html = "";
@@ -261,19 +262,20 @@ public class Scope {
 
     public boolean hasProc(String s) {
         if (!table.isEmpty()) {
-        for (Integer i : ids) {
-            if (this.table.get(i) == null) {
-                continue;
+            for (Integer i : ids) {
+                if (this.table.get(i) == null) {
+                    continue;
+                }
+                if (this.table.get(i).name.equals(s) && this.table.get(i).type == _TokenType.PROC) {
+                    return true;
+                }
             }
-            if (this.table.get(i).name.equals(s) && this.table.get(i).type == _TokenType.PROC) {
-                return true;
-            }
-        }}
+        }
 
         if (!siblings.isEmpty()) {
 
             for (Integer i : idsSiblings) {
-                if (this.siblings.get(i) ==  null) {
+                if (this.siblings.get(i) == null) {
                     continue;
                 }
                 if (this.siblings.get(i).name.equals(s) && this.siblings.get(i).type == _TokenType.PROC) {
@@ -281,7 +283,6 @@ public class Scope {
                 }
             }
         }
-
 
         return false;
     }
@@ -291,7 +292,7 @@ public class Scope {
             for (Integer i : ids) {
                 var symbol = this.table.get(i);
 
-                if (symbol ==  null) {
+                if (symbol == null) {
                     continue;
                 }
                 if (symbol.name.equals(s) && symbol.type == type) {
@@ -305,7 +306,7 @@ public class Scope {
             for (Integer i : idsSiblings) {
                 var symbol = this.table.get(i);
 
-                if (symbol ==  null) {
+                if (symbol == null) {
                     continue;
                 }
                 if (symbol.name.equals(s) && symbol.type == type) {
@@ -313,7 +314,6 @@ public class Scope {
                 }
             }
         }
-
 
         return false;
     }
@@ -323,7 +323,7 @@ public class Scope {
             for (Integer i : ids) {
                 var symbol = this.table.get(i);
 
-                if (symbol ==  null) {
+                if (symbol == null) {
                     continue;
                 }
                 if (symbol.name.equals(s) && symbol.type == type) {
@@ -337,7 +337,7 @@ public class Scope {
             for (Integer i : idsSiblings) {
                 var symbol = this.table.get(i);
 
-                if (symbol ==  null) {
+                if (symbol == null) {
                     continue;
                 }
                 if (symbol.name.equals(s) && symbol.type == type) {
@@ -345,17 +345,17 @@ public class Scope {
                 }
             }
         }
-        
+
         return false;
     }
 
-    public boolean hasCall(String name){
+    public boolean hasCall(String name) {
         if (calls.isEmpty()) {
             return false;
         }
 
         for (Integer i : idsCalls) {
-            if (this.calls.get(i) ==  null) {
+            if (this.calls.get(i) == null) {
                 continue;
             }
             if (this.calls.get(i).name.equals(name)) {
@@ -372,9 +372,9 @@ public class Scope {
         }
 
         System.out.println(this.parent.name);
-        for (Integer s: this.parent.ids) {
+        for (Integer s : this.parent.ids) {
             if (this.hasProc(this.parent.table.get(s).name)) {
-                throw new RuntimeException("Procedure " + this.parent.table.get(s).name + " not allowed in the scope of "+ this.name +" as it already exists.");
+                throw new RuntimeException("Procedure " + this.parent.table.get(s).name + " not allowed in the scope of " + this.name + " as it already exists.");
             } else if (this.parent.table.get(s).type == _TokenType.PROC) {
                 System.out.println("Adding procedure " + this.parent.table.get(s).name + " to scope " + this.name);
                 this.idsSiblings.add(s);
@@ -390,9 +390,9 @@ public class Scope {
             if (this.table.get(id) == null) {
                 continue;
             }
-            if (this.hasCall((String)table.get(id).name)) {
-            } else if (this.table.get(id).type == _TokenType.PROC) {                
-                html += "<br>WARNING : Proc " + this.table.get(id).name + " is never called in scope: " + name+".";
+            if (this.hasCall((String) table.get(id).name)) {
+            } else if (this.table.get(id).type == _TokenType.PROC) {
+                html += "<br>WARNING : Proc " + this.table.get(id).name + " is never called in scope: " + name + ".";
             }
         }
 
@@ -400,9 +400,9 @@ public class Scope {
             if (this.siblings.get(sid) == null) {
                 continue;
             }
-            if (this.hasCall((String)siblings.get(sid).name)) {
+            if (this.hasCall((String) siblings.get(sid).name)) {
             } else if (this.siblings.get(sid).type == _TokenType.PROC) {
-                html += "<br>WARNING : Proc " + this.siblings.get(sid).name + " is never called in scope: " + name+".";
+                html += "<br>WARNING : Proc " + this.siblings.get(sid).name + " is never called in scope: " + name + ".";
             }
         }
 
@@ -416,9 +416,9 @@ public class Scope {
             if (this.calls.get(id) == null) {
                 continue;
             }
-            if (this.hasProc((String)calls.get(id).name)) {
+            if (this.hasProc((String) calls.get(id).name)) {
             } else {
-                html += "<br>ERROR : Proc " + this.calls.get(id).name + " is called in Proc " + name + " but does not exist within the scope of Proc "+name+".";
+                html += "<br>ERROR : Proc " + this.calls.get(id).name + " is called in Proc " + name + " but does not exist within the scope of Proc " + name + ".";
             }
         }
 
@@ -427,5 +427,9 @@ public class Scope {
 
     public boolean containsCallAndProc(String callName, String procName) {
         return this.hasProc(procName) && this.hasCall(callName);
+    }
+
+    public boolean containsVarByName(Scope scope, String name, _TokenType type) {
+        return this.hasVar(name, type);
     }
 }

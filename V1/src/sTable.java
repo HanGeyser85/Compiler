@@ -1,7 +1,9 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class sTable {
+
     List<Scope> scopes = new ArrayList<>();
     Integer sizInteger = 0;
     vTable variableTable = new vTable();
@@ -29,62 +31,75 @@ public class sTable {
         String html = "";
 
         for (int i = 0; i < sizInteger; i++) {
-            html += "<br><h2>Proc "+scopes.get(i).name+" Scope</h2><table border=\"1\"> <br><th> Name </th> <th> Type </th> <th> ID </th>";
+            html += "<br><h2>Proc " + scopes.get(i).name + " Scope</h2><table border=\"1\"> <br><th> Name </th> <th> Type </th> <th> ID </th>";
             html += scopes.get(i).toHTML();
             html += "</table><br>";
         }
-
 
         return html;
     }
 
     public void addVisibleVariables(Scope scope, Scope parent) {
         for (Symbol s : parent.table.values()) {
-            if (null != s.type) switch (s.type) {
-                case NUMVAR -> {
-                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
-                    newSymbol.isFromParent = true;
-                    newSymbol.isVisibleToChild = true;
-                    newSymbol.isUsed = false;
-                    newSymbol.isInitialized = false;
-                    scope.table.put(s.id, newSymbol);
-                    scope.ids.add(s.id);
-                    scope.sizInteger++;
+            if (null != s.type && s.isVisibleToChild) {
+                switch (s.type) {
+                    case NUMVAR -> {
+                        if (scope.containsVarByName(scope, s.name, s.type)) {
+                            continue;
+                        }
+
+                        Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                        newSymbol.isFromParent = true;
+                        newSymbol.isVisibleToChild = true;
+                        newSymbol.isUsed = false;
+                        newSymbol.isInitialized = false;
+                        scope.table.put(s.id, newSymbol);
+                        scope.ids.add(s.id);
+                        scope.sizInteger++;
                     }
-                case STRINGV -> {
-                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
-                    newSymbol.isFromParent = true;
-                    newSymbol.isVisibleToChild = true;
-                    newSymbol.isUsed = false;
-                    newSymbol.isInitialized = false;
-                    scope.table.put(s.id, newSymbol);
-                    scope.ids.add(s.id);
-                    scope.sizInteger++;
+                    case STRINGV -> {
+                        if (scope.containsVarByName(scope, s.name, s.type)) {
+                            continue;
+                        }
+
+                        Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                        newSymbol.isFromParent = true;
+                        newSymbol.isVisibleToChild = true;
+                        newSymbol.isUsed = false;
+                        newSymbol.isInitialized = false;
+                        scope.table.put(s.id, newSymbol);
+                        scope.ids.add(s.id);
+                        scope.sizInteger++;
                     }
-                case BOOLVAR -> {
-                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
-                    newSymbol.isFromParent = true;
-                    newSymbol.isVisibleToChild = true;
-                    newSymbol.isUsed = false;
-                    newSymbol.isInitialized = false;
-                    scope.table.put(s.id, newSymbol);
-                    scope.ids.add(s.id);
-                    scope.sizInteger++;
+                    case BOOLVAR -> {
+                        if (scope.containsVarByName(scope, s.name, s.type)) {
+                            continue;
+                        }
+
+                        Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                        newSymbol.isFromParent = true;
+                        newSymbol.isVisibleToChild = true;
+                        newSymbol.isUsed = false;
+                        newSymbol.isInitialized = false;
+                        scope.table.put(s.id, newSymbol);
+                        scope.ids.add(s.id);
+                        scope.sizInteger++;
                     }
-                default -> {
+                    default -> {
+                    }
                 }
             }
         }
     }
-    
+
     public void defineScopes(ASTNode root, Scope parent) {
         if (root == null) {
             return;
         }
-    
+
         if (root.type == _TokenType.PROC) {
             Scope scope = new Scope(variableTable);
-    
+
             String nameString = "";
             for (ASTNode astNode : root.children) {
                 if (astNode.type == _TokenType.D) {
@@ -93,15 +108,15 @@ public class sTable {
             }
             scope.name = nameString;
             scope.parent = parent;
-    
+
             for (ASTNode astNode : root.children) {
                 scope.populateTable(astNode);
             }
-    
+
             addScope(scope, root.number);
 
             addVisibleVariables(scope, parent);
-    
+
             for (ASTNode child : root.children) {
                 defineScopes(child, scope);
             }
@@ -111,7 +126,6 @@ public class sTable {
             }
         }
     }
-    
 
     public void addSiblings() {
         for (Scope integer : scopes) {
@@ -123,7 +137,7 @@ public class sTable {
             }
         }
 
-        for (Scope s : scopes) {   
+        for (Scope s : scopes) {
             s.addSiblingProcs();
         }
     }
@@ -150,9 +164,9 @@ public class sTable {
         Scope scope = new Scope(variableTable);
         scope.name = "main";
         scope.populateTable(tree);
-        addScope(scope, 0); 
+        addScope(scope, 0);
         for (ASTNode child : tree.children) {
-            
+
             defineScopes(child, scope);
         }
     }
@@ -162,93 +176,96 @@ public class sTable {
             return;
         }
 
-        if (null != node.type) switch (node.type) {
-            case ASSIGN -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Expression after assignment operator has no value!<br>";
+        if (null != node.type) {
+            switch (node.type) {
+                case ASSIGN -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Expression after assignment operator has no value!<br>";
+                    }
                 }
-            }
-            case INPUT_GET -> variableTable.hasValue(node);
-            case NUMEXPR_ADDITION -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in addition expression has no value!<br>";
+                case INPUT_GET ->
+                    variableTable.hasValue(node);
+                case NUMEXPR_ADDITION -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in addition expression has no value!<br>";
+                    }
                 }
-            }
-            case NUMEXPR_MULTIPLICATION -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in multiplication expression has no value!<br>";
+                case NUMEXPR_MULTIPLICATION -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in multiplication expression has no value!<br>";
+                    }
                 }
-            }
-            case NUMEXPR_DIVISION -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in division expression has no value!<br>";
+                case NUMEXPR_DIVISION -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in division expression has no value!<br>";
+                    }
                 }
-            }
-            case NUMVAR -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Numvar with id " + node.number + " has no value!<br>";
+                case NUMVAR -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Numvar with id " + node.number + " has no value!<br>";
+                    }
                 }
-            }
-            case STRINGV -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Stringvar with id " + node.number + " has no value!<br>";
+                case STRINGV -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Stringvar with id " + node.number + " has no value!<br>";
+                    }
                 }
-            }
-            case BOOLVAR -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Boolvar with id " + node.number + " has no value!<br>";
+                case BOOLVAR -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Boolvar with id " + node.number + " has no value!<br>";
+                    }
                 }
-            }
-            case NOT -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Expression has no value!<br>";
+                case NOT -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Expression has no value!<br>";
+                    }
                 }
-            }
-            case OR -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in OR expression has no value!<br>";
+                case OR -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in OR expression has no value!<br>";
+                    }
                 }
-            }
-            case CMPR_GREATERTHAN -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in greater than expression has no value!<br>";
+                case CMPR_GREATERTHAN -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in greater than expression has no value!<br>";
+                    }
                 }
-            }
-            case CMPR_EQUAL -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in equal expression has no value!<br>";
+                case CMPR_EQUAL -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in equal expression has no value!<br>";
+                    }
                 }
-            }
-            case CMPR_LESSTHAN -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: One or more parameters in less than expression has no value!<br>";
+                case CMPR_LESSTHAN -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: One or more parameters in less than expression has no value!<br>";
+                    }
                 }
-            }
-            case BRANCH -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Boolexpr in IF statement has no value!<br>";
-                    hasError = true;
-                    return;
+                case BRANCH -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Boolexpr in IF statement has no value!<br>";
+                        hasError = true;
+                        return;
+                    }
                 }
-            }
-            case LOOP -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Boolexpr in WHILE loop has no value!<br>";
-                    hasError = true;
-                    return;
+                case LOOP -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Boolexpr in WHILE loop has no value!<br>";
+                        hasError = true;
+                        return;
+                    }
                 }
-            }
-            case OUTPUT -> {
-                if (!variableTable.hasValue(node)) {
-                    synAl += "SEMANTIC ERROR: Output value has no value!<br>";
+                case OUTPUT -> {
+                    if (!variableTable.hasValue(node)) {
+                        synAl += "SEMANTIC ERROR: Output value has no value!<br>";
+                    }
                 }
-            }
-            default -> {
+                default -> {
+                }
             }
         }
-        
+
         for (ASTNode child : node.children) {
-            
+
             if (child.type == _TokenType.HALT) {
                 return;
             }
