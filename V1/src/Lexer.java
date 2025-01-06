@@ -1,34 +1,32 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Lexer {
-    private List<Token> lexicalTokens = new ArrayList<Token>();
+
+    private List<Token> lexicalTokens = new ArrayList<>();
 
     public List<Token> lexicalAnalysis(String input) throws Exception {
         String builder = "";
 
         System.out.println(input);
 
-        for (int i = 0; i < input.length(); ) {
+        for (int i = 0; i < input.length();) {
             builder += input.charAt(i);
-            
+
             if (builder.equals(" ")) {
                 builder = "";
-                i++;                
-            } 
-            else if (builder.equals("\n")) {
+                i++;
+            } else if (builder.equals("\n")) {
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("\t")) {
+            } else if (builder.equals("\t")) {
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("\r")) {
+            } else if (builder.equals("\r")) {
                 builder = "";
                 i++;
-            }
-            else if (builder.equals(",")) {
+            } else if (builder.equals(",")) {
                 Token tempToken = new Token(builder, _TokenType.SEPARATOR);
 
                 if (lexicalTokens.isEmpty()) {
@@ -40,8 +38,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("p")) {
+            } else if (builder.equals("p")) {
                 Token tempToken = new Token(builder, _TokenType.PROC);
 
                 if (lexicalTokens.isEmpty()) {
@@ -53,8 +50,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("1")) {
+            } else if (builder.equals("1")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -63,11 +59,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("2")) {
+            } else if (builder.equals("2")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -76,11 +71,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("3")) {
+            } else if (builder.equals("3")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -89,11 +83,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("4")) {
+            } else if (builder.equals("4")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -102,11 +95,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("5")) {
+            } else if (builder.equals("5")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -115,11 +107,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("6")) {
+            } else if (builder.equals("6")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -128,11 +119,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("7")) {
+            } else if (builder.equals("7")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -141,11 +131,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("8")) {
+            } else if (builder.equals("8")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -154,11 +143,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("9")) {
+            } else if (builder.equals("9")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -167,11 +155,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("0")) {
+            } else if (builder.equals("0")) {
                 Token tempToken = new Token(builder, _TokenType.D);
 
                 if (lexicalTokens.isEmpty()) {
@@ -180,11 +167,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals(";")) {
+            } else if (builder.equals(";")) {
                 Token tempToken = new Token(builder, _TokenType.DIVIDER);
 
                 if (lexicalTokens.isEmpty()) {
@@ -193,11 +179,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("h")) {
+            } else if (builder.equals("h")) {
                 Token tempToken = new Token(builder, _TokenType.HALT);
 
                 if (lexicalTokens.isEmpty()) {
@@ -206,11 +191,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            }
-            else if (builder.equals("c")) {
+            } else if (builder.equals("c")) {
                 Token tempToken = new Token(builder, _TokenType.CALL);
 
                 if (lexicalTokens.isEmpty()) {
@@ -222,8 +206,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("w")) {
+            } else if (builder.equals("w")) {
                 Token tempToken = new Token(builder, _TokenType.WHILE);
 
                 if (lexicalTokens.isEmpty()) {
@@ -235,8 +218,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("i")) {
+            } else if (builder.equals("i")) {
                 Token tempToken = new Token(builder, _TokenType.IF);
 
                 if (lexicalTokens.isEmpty()) {
@@ -248,8 +230,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("t")) {
+            } else if (builder.equals("t")) {
                 Token tempToken = new Token(builder, _TokenType.THEN);
 
                 if (lexicalTokens.isEmpty()) {
@@ -261,8 +242,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("e")) {
+            } else if (builder.equals("e")) {
                 Token tempToken = new Token(builder, _TokenType.ELSE);
 
                 if (lexicalTokens.isEmpty()) {
@@ -274,8 +254,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("n")) {
+            } else if (builder.equals("n")) {
                 Token tempToken = new Token(builder, _TokenType.NUMVAR);
 
                 if (lexicalTokens.isEmpty()) {
@@ -287,8 +266,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("b")) {
+            } else if (builder.equals("b")) {
                 Token tempToken = new Token(builder, _TokenType.BOOLVAR);
 
                 if (lexicalTokens.isEmpty()) {
@@ -300,8 +278,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("s")) {
+            } else if (builder.equals("s")) {
                 Token tempToken = new Token(builder, _TokenType.STRINGV);
 
                 if (lexicalTokens.isEmpty()) {
@@ -313,8 +290,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("a")) {
+            } else if (builder.equals("a")) {
                 Token tempToken = new Token(builder, _TokenType.NUMEXPR_ADDITION);
 
                 if (lexicalTokens.isEmpty()) {
@@ -326,8 +302,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("m")) {
+            } else if (builder.equals("m")) {
                 Token tempToken = new Token(builder, _TokenType.NUMEXPR_MULTIPLICATION);
 
                 if (lexicalTokens.isEmpty()) {
@@ -339,8 +314,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("d")) {
+            } else if (builder.equals("d")) {
                 Token tempToken = new Token(builder, _TokenType.NUMEXPR_DIVISION);
 
                 if (lexicalTokens.isEmpty()) {
@@ -352,8 +326,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("-")) {
+            } else if (builder.equals("-")) {
                 Token tempToken = new Token(builder, _TokenType.NEG_MINUS);
 
                 if (lexicalTokens.isEmpty()) {
@@ -365,8 +338,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals(".")) {
+            } else if (builder.equals(".")) {
                 Token tempToken = new Token(builder, _TokenType.POS_FLOATPOINT);
 
                 if (lexicalTokens.isEmpty()) {
@@ -378,8 +350,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("T")) {
+            } else if (builder.equals("T")) {
                 Token tempToken = new Token(builder, _TokenType.LOGIC_TRUE);
 
                 if (lexicalTokens.isEmpty()) {
@@ -391,8 +362,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("F")) {
+            } else if (builder.equals("F")) {
                 Token tempToken = new Token(builder, _TokenType.LOGIC_FALSE);
 
                 if (lexicalTokens.isEmpty()) {
@@ -404,8 +374,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("^")) {
+            } else if (builder.equals("^")) {
                 Token tempToken = new Token(builder, _TokenType.LOGIC_AND);
 
                 if (lexicalTokens.isEmpty()) {
@@ -417,8 +386,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("!")) {
+            } else if (builder.equals("!")) {
                 Token tempToken = new Token(builder, _TokenType.LOGIC_NOT);
 
                 if (lexicalTokens.isEmpty()) {
@@ -430,8 +398,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("v")) {
+            } else if (builder.equals("v")) {
                 Token tempToken = new Token(builder, _TokenType.LOGIC_OR);
 
                 if (lexicalTokens.isEmpty()) {
@@ -443,8 +410,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("E")) {
+            } else if (builder.equals("E")) {
                 Token tempToken = new Token(builder, _TokenType.CMPR_EQUAL);
 
                 if (lexicalTokens.isEmpty()) {
@@ -456,8 +422,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("<")) {
+            } else if (builder.equals("<")) {
                 Token tempToken = new Token(builder, _TokenType.CMPR_LESSTHAN);
 
                 if (lexicalTokens.isEmpty()) {
@@ -469,8 +434,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals(">")) {
+            } else if (builder.equals(">")) {
                 Token tempToken = new Token(builder, _TokenType.CMPR_GREATERTHAN);
 
                 if (lexicalTokens.isEmpty()) {
@@ -479,11 +443,10 @@ public class Lexer {
                     lexicalTokens.add(tempToken);
                     lexicalTokens.get(lexicalTokens.size() - 1).setNext(tempToken);
                 }
-                
+
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("\"")) {
+            } else if (builder.equals("\"")) {
                 String SPLString = "";
                 SPLString += input.charAt(i++); // First quote
 
@@ -503,8 +466,7 @@ public class Lexer {
                 }
 
                 builder = "";
-            } 
-            else if (builder.equals("*")) {
+            } else if (builder.equals("*")) {
                 String SPLString = "";
                 SPLString += input.charAt(i++); // First quote
 
@@ -524,8 +486,7 @@ public class Lexer {
                 }
 
                 builder = "";
-            } 
-            else if (builder.equals("g")) {
+            } else if (builder.equals("g")) {
                 Token tempToken = new Token(builder, _TokenType.INPUT_GET);
 
                 if (lexicalTokens.isEmpty()) {
@@ -537,8 +498,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("o")) {
+            } else if (builder.equals("o")) {
                 Token tempToken = new Token(builder, _TokenType.OUTPUT);
 
                 if (lexicalTokens.isEmpty()) {
@@ -550,8 +510,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("r")) {
+            } else if (builder.equals("r")) {
                 Token tempToken = new Token(builder, _TokenType.TEXT_RESPONSE);
 
                 if (lexicalTokens.isEmpty()) {
@@ -563,8 +522,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("{")) {
+            } else if (builder.equals("{")) {
                 Token tempToken = new Token(builder, _TokenType.OPENBRACKET);
 
                 if (lexicalTokens.isEmpty()) {
@@ -576,8 +534,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("}")) {
+            } else if (builder.equals("}")) {
                 Token tempToken = new Token(builder, _TokenType.CLOSEBRACKET);
 
                 if (lexicalTokens.isEmpty()) {
@@ -589,8 +546,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals("(")) {
+            } else if (builder.equals("(")) {
                 Token tempToken = new Token(builder, _TokenType.OPENPARENTHESIS);
 
                 if (lexicalTokens.isEmpty()) {
@@ -602,8 +558,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals(")")) {
+            } else if (builder.equals(")")) {
                 Token tempToken = new Token(builder, _TokenType.CLOSEPARENTHESIS);
 
                 if (lexicalTokens.isEmpty()) {
@@ -615,8 +570,7 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (builder.equals(":=")) {
+            } else if (builder.equals(":=")) {
                 Token tempToken = new Token(builder, _TokenType.ASSIGN);
 
                 if (lexicalTokens.isEmpty()) {
@@ -628,11 +582,9 @@ public class Lexer {
 
                 builder = "";
                 i++;
-            } 
-            else if (i == input.length()-1 && builder != "") {
+            } else if (i == input.length() - 1 && !"".equals(builder)) {
                 throw new Exception("Syntax error");
-            }
-            else {
+            } else {
                 i++;
             }
         }
@@ -648,12 +600,13 @@ public class Lexer {
         this.lexicalTokens = tokens;
     }
 
+    @Override
     public String toString() {
         String output = "";
         for (Token token : (Token[]) lexicalTokens.toArray()) {
             output += "Token {" + token.toString() + "}\n";
         }
-        
-        return output;                                              
+
+        return output;
     }
 }

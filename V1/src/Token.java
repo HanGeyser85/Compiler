@@ -1,6 +1,8 @@
+
 public class Token {
-    private String value;
-    private _TokenType type;
+
+    private final String value;
+    private final _TokenType type;
     private Token next;
 
     public Token(String value, _TokenType type, Token next) {
@@ -30,6 +32,7 @@ public class Token {
         return type;
     }
 
+    @Override
     public String toString() {
         return "Value: " + value + " Type: " + type.name();
     }

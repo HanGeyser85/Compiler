@@ -76,7 +76,7 @@ public class ASTNode {
         }
         ret += ">\n";
 
-        if (content != "") {
+        if (!"".equals(content)) {
             ret += content+"\n";
         }
 

@@ -1,4 +1,6 @@
+
 public class AST {
+
     ASTNode root;
 
     public ASTNode getRoot() {
@@ -15,7 +17,7 @@ public class AST {
     }
 
     public ASTNode jumpToNode(ASTNode node, String id) {
-        if (node.number.equals(id)) {
+        if (String.valueOf(node.number).equals(id)) {
             return node;
         }
         for (ASTNode child : node.children) {
@@ -27,5 +29,4 @@ public class AST {
         return null;
     }
 
-    
 }

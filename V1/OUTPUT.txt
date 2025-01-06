@@ -3,26 +3,22 @@
 3 END
 4 REM The end is th ensure that the program does not run into the subroutine unless called!
 5001 REM 5001
-5 LET B1 = 1
-6 LET N1 = 5.00
-7004 REM 7004
-7 LET N1 = N1 + 3.00
-8 GOTO 7007
-7005 REM 7005
-7007 REM 7007
-9 PRINT N1
-10 PRINT S1$
-11 STOP
-12 RETURN
-13 END
-14 REM The end is th ensure that the program does not run into the subroutine unless called!
+5 LET B10 = 1
+6 STOP
+7 RETURN
+8 END
+9 REM The end is th ensure that the program does not run into the subroutine unless called!
 5002 REM 5002
 3003 REM 3003
 3004 REM 3004
-15 LET N10 = N10 + 1.00
-16 GOTO 3003
+10 LET N10 = N10 + 1.00
+11 GOTO 3003
 3005 REM 3005
-17 GOSUB 5001
-18 PRINT N10
-19 STOP
-20 RETURN
+12 GOSUB 5001
+13 PRINT N10
+14 END
+15 REM The end is th ensure that the program does not run into the subroutine unless called!
+5003 REM 5003
+16 LET B11 = 1
+17 RETURN
+18 RETURN

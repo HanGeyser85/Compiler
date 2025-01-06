@@ -4,7 +4,8 @@ public class Variable {
     _TokenType type;
     Integer id;
     Boolean hasValue;
-    Boolean notReached;
+    Boolean notUsed;
+
     public Boolean getHasValue() {
         return hasValue;
     }
@@ -32,6 +33,7 @@ public class Variable {
     public Variable() {
     }
 
+    @Override
     public String toString() {
         return "Variable: " + name + " Type: " + type;
     }

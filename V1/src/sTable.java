@@ -2,11 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class sTable {
-    List<Scope> scopes = new ArrayList<Scope>();
+    List<Scope> scopes = new ArrayList<>();
     Integer sizInteger = 0;
-    List<Integer> ids = new ArrayList<Integer>();
     vTable variableTable = new vTable();
-boolean hasHalt = false;
+    fTable functionTable = new fTable();
     boolean hasError = false;
     String synAl = "";
     AST tree;
@@ -38,47 +37,81 @@ boolean hasHalt = false;
 
         return html;
     }
+
+    public void addVisibleVariables(Scope scope, Scope parent) {
+        for (Symbol s : parent.table.values()) {
+            if (null != s.type) switch (s.type) {
+                case NUMVAR -> {
+                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                    newSymbol.isFromParent = true;
+                    newSymbol.isVisibleToChild = true;
+                    newSymbol.isUsed = false;
+                    newSymbol.isInitialized = false;
+                    scope.table.put(s.id, newSymbol);
+                    scope.ids.add(s.id);
+                    scope.sizInteger++;
+                    }
+                case STRINGV -> {
+                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                    newSymbol.isFromParent = true;
+                    newSymbol.isVisibleToChild = true;
+                    newSymbol.isUsed = false;
+                    newSymbol.isInitialized = false;
+                    scope.table.put(s.id, newSymbol);
+                    scope.ids.add(s.id);
+                    scope.sizInteger++;
+                    }
+                case BOOLVAR -> {
+                    Symbol newSymbol = new Symbol(s.id, s.name, s.type);
+                    newSymbol.isFromParent = true;
+                    newSymbol.isVisibleToChild = true;
+                    newSymbol.isUsed = false;
+                    newSymbol.isInitialized = false;
+                    scope.table.put(s.id, newSymbol);
+                    scope.ids.add(s.id);
+                    scope.sizInteger++;
+                    }
+                default -> {
+                }
+            }
+        }
+    }
     
     public void defineScopes(ASTNode root, Scope parent) {
         if (root == null) {
             return;
         }
-
-        if (sizInteger == 0 && parent == null) {
-            defineMainScope(root);
-        }
-
-        
-        Scope scope = new Scope();
-        
+    
         if (root.type == _TokenType.PROC) {
+            Scope scope = new Scope(variableTable);
+    
             String nameString = "";
-            
             for (ASTNode astNode : root.children) {
                 if (astNode.type == _TokenType.D) {
                     nameString += astNode.content;
                 }
             }
             scope.name = nameString;
-            for (ASTNode integer : root.children) {
-                scope.populateTable(integer);  
-            }
-            addScope(scope, root.number);
-            
-            
-        }
-
-        if (scope.parent == null) {
             scope.parent = parent;
-        }
+    
+            for (ASTNode astNode : root.children) {
+                scope.populateTable(astNode);
+            }
+    
+            addScope(scope, root.number);
 
-        for (ASTNode child : root.children) {
-            
-            defineScopes(child, scope);
+            addVisibleVariables(scope, parent);
+    
+            for (ASTNode child : root.children) {
+                defineScopes(child, scope);
+            }
+        } else {
+            for (ASTNode child : root.children) {
+                defineScopes(child, parent);
+            }
         }
-
-        
     }
+    
 
     public void addSiblings() {
         for (Scope integer : scopes) {
@@ -114,7 +147,7 @@ boolean hasHalt = false;
     }
 
     public void defineMainScope(ASTNode tree) {
-        Scope scope = new Scope();
+        Scope scope = new Scope(variableTable);
         scope.name = "main";
         scope.populateTable(tree);
         addScope(scope, 0); 
@@ -129,82 +162,94 @@ boolean hasHalt = false;
             return;
         }
 
-        if (node.type == _TokenType.ASSIGN) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Expression after assignment operator has no value!<br>";
+        if (null != node.type) switch (node.type) {
+            case ASSIGN -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Expression after assignment operator has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.INPUT_GET) {
-            variableTable.hasValue(node);
-        } else if (node.type == _TokenType.NUMEXPR_ADDITION) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in addition expression has no value!<br>";
+            case INPUT_GET -> variableTable.hasValue(node);
+            case NUMEXPR_ADDITION -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in addition expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.NUMEXPR_MULTIPLICATION) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in multiplication expression has no value!<br>";
+            case NUMEXPR_MULTIPLICATION -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in multiplication expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.NUMEXPR_DIVISION) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in division expression has no value!<br>";
+            case NUMEXPR_DIVISION -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in division expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.NUMVAR) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Numvar with id " + node.number + " has no value!<br>";
+            case NUMVAR -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Numvar with id " + node.number + " has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.STRINGV) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Stringvar with id " + node.number + " has no value!<br>";
+            case STRINGV -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Stringvar with id " + node.number + " has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.BOOLVAR) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Boolvar with id " + node.number + " has no value!<br>";
+            case BOOLVAR -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Boolvar with id " + node.number + " has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.NOT) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Expression has no value!<br>";
+            case NOT -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.OR) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in OR expression has no value!<br>";
+            case OR -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in OR expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.CMPR_GREATERTHAN) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in greater than expression has no value!<br>";
+            case CMPR_GREATERTHAN -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in greater than expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.CMPR_EQUAL) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in equal expression has no value!<br>";
+            case CMPR_EQUAL -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in equal expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.CMPR_LESSTHAN) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: One or more parameters in less than expression has no value!<br>";
+            case CMPR_LESSTHAN -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: One or more parameters in less than expression has no value!<br>";
+                }
             }
-        } else if (node.type == _TokenType.BRANCH) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Boolexpr in IF statement has no value!<br>";
-                hasError = true;
-                return;
+            case BRANCH -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Boolexpr in IF statement has no value!<br>";
+                    hasError = true;
+                    return;
+                }
             }
-        } else if (node.type == _TokenType.LOOP) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Boolexpr in WHILE loop has no value!<br>";
-                hasError = true;
-                return;
+            case LOOP -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Boolexpr in WHILE loop has no value!<br>";
+                    hasError = true;
+                    return;
+                }
             }
-        } else if (node.type == _TokenType.OUTPUT) {
-            if (!variableTable.hasValue(node)) {
-                synAl += "SEMANTIC ERROR: Output value has no value!<br>";
+            case OUTPUT -> {
+                if (!variableTable.hasValue(node)) {
+                    synAl += "SEMANTIC ERROR: Output value has no value!<br>";
+                }
+            }
+            default -> {
             }
         }
         
         for (ASTNode child : node.children) {
             
             if (child.type == _TokenType.HALT) {
-                hasHalt = true;
-                return;
-            }
-            if (hasHalt) {
-                hasHalt = false;
                 return;
             }
             if (hasError) {
@@ -213,8 +258,6 @@ boolean hasHalt = false;
             }
             semanticAnalysis(child);
         }
-
-        return;
     }
 
     public void jumpToProc(ASTNode node) {
@@ -243,8 +286,6 @@ boolean hasHalt = false;
                 }
             }
         }
-
-        return;
     }
 
     public ASTNode findProcId(ASTNode current, String name) {
