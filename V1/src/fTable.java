@@ -1,9 +1,11 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class fTable {
+
     HashMap<Integer, Function> table = new HashMap<>();
     Integer sizInteger = 0;
     List<Integer> ids = new ArrayList<>();
@@ -47,12 +49,11 @@ public class fTable {
             Function func = table.get(key);
             if (func != null && func.name.equals(name)) {
                 table.remove(key);
-                it.remove();       
+                it.remove();
             }
         }
-        sizInteger = ids.size(); 
+        sizInteger = ids.size();
     }
-    
 
     public void printTable() {
         for (Integer i : ids) {
@@ -61,13 +62,13 @@ public class fTable {
     }
 
     public String toXML() {
-        String xml = "<vTable>";
+        String xml = "<fTable>";
 
         for (Integer i : ids) {
             xml += table.get(i).toXML();
         }
 
-        xml += "</vTable>";
+        xml += "</fTable>";
 
         return xml;
     }
@@ -92,8 +93,6 @@ public class fTable {
             return;
         }
 
-        Function func = new Function();
-
         if (node.type == _TokenType.PROC) {
             String nameString = "";
 
@@ -103,13 +102,38 @@ public class fTable {
                 }
             }
 
-            func.name = nameString;
-            func.id = node.number;
-            func.isCalled = false;
+            if (!hasFunction(nameString) && node.parent.type != _TokenType.CALL) {
+                Function func = new Function();
 
-            if (!hasFunction(nameString)) {
+                func.name = nameString;
+                func.id = node.number;
+                func.isCalled = false;
+
                 ids.add(node.number);
                 addFunction(func, node.number);
+            } else if (hasFunction(nameString) && node.parent.type == _TokenType.CALL) {
+                Function f = getFunction(nameString);
+
+                f.isCalled = true;
+                f.CalledAtIds.add(node.number);
+            } else if (!hasFunction(nameString) && node.parent.type == _TokenType.CALL) {
+                Function func = new Function();
+
+                func.name = nameString;
+                func.id = -node.number;
+                func.isCalled = true;
+                func.CalledAtIds.add(node.number);
+
+                ids.add(-node.number);
+                addFunction(func, -node.number);
+            } else if (hasFunction(nameString) && node.parent.type != _TokenType.CALL) {
+                Function f = getFunction(nameString);
+                Integer index = ids.indexOf(f.id);
+
+                f.id = node.number;
+
+                ids.set(index, node.number);
+                addFunction(f, node.number);
             }
         }
 

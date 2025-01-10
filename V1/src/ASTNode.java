@@ -1,7 +1,9 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ASTNode {
+
     ASTNode parent;
     String value;
     _TokenType type;
@@ -11,16 +13,19 @@ public class ASTNode {
     public String getContent() {
         return content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
 
     List<ASTNode> children = new ArrayList<>();
+
     public ASTNode(String value, _TokenType type, Integer number) {
         this.value = value;
         this.type = type;
         this.number = number;
     }
+
     public ASTNode getParent() {
         return parent;
     }
@@ -56,7 +61,7 @@ public class ASTNode {
     public List<ASTNode> getChildren() {
         return children;
     }
-    
+
     public void setChildren(List<ASTNode> children) {
         this.children = children;
     }
@@ -65,7 +70,7 @@ public class ASTNode {
     public String toString() {
         String ret = "";
 
-        ret += "<"+value+" id=\""+number+"\" type=\""+type+"\"";
+        ret += "<" + value + " id=\"" + number + "\" type=\"" + type + "\"";
 
         if (!children.isEmpty()) {
             ret += " children=\"";
@@ -77,7 +82,7 @@ public class ASTNode {
         ret += ">\n";
 
         if (!"".equals(content)) {
-            ret += content+"\n";
+            ret += content + "\n";
         }
 
         if (!children.isEmpty()) {
@@ -85,8 +90,8 @@ public class ASTNode {
                 ret += astNode.toString();
             }
         }
-        
-        ret += "</"+value+">\n";
+
+        ret += "</" + value + ">\n";
         return ret;
     }
 

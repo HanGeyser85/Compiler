@@ -97,7 +97,7 @@ public class sTable {
             return;
         }
 
-        if (root.type == _TokenType.PROC) {
+        if (root.type == _TokenType.PROC && root.parent.type != _TokenType.CALL) {
             Scope scope = new Scope(variableTable);
 
             String nameString = "";

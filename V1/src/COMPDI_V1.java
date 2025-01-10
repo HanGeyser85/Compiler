@@ -56,18 +56,6 @@ public class COMPDI_V1 {
                     return;
                 }
                 try {
-                    IntermediateCodeGenerator generator = new IntermediateCodeGenerator();
-                    generator.generate(parser.tree.root);
-                    outputIntermediate.write(generator.toString());
-                    outputIntermediate.close();
-                    System.out.println("Intermediate Code Generation finished");
-                } catch (IOException e) {
-                    outputIntermediate.close();
-                    inputReader.close();
-                    outputWriterSymbolTable.close();
-                    return;
-                }
-                try {
                     variableTable.populateTable(parser.tree.root);
                     functionTable.populateTable(parser.tree.root);
                     symbolTable.functionTable = functionTable;
@@ -81,6 +69,7 @@ public class COMPDI_V1 {
                     outputWriterSymbolTable.write(functionTable.toHTML());
                     outputWriterSymbolTable.write("<h1>Symbol Table</h1>");
                     outputWriterSymbolTable.write(symbolTable.toHTML());
+                    outputWriterSymbolTable.write("<h1>Calls</h1>");
                     outputWriterSymbolTable.write(symbolTable.checkForCalls());
                     outputWriterSymbolTable.write(symbolTable.checkIfCalledProcExists());
                     outputWriterSymbolTable.write("<p>" + symbolTable.synAl + "</p>");
@@ -95,8 +84,19 @@ public class COMPDI_V1 {
                     outputWriterSymbolTable.close();
                     return;
                 }
+                try {
+                    IntermediateCodeGenerator generator = new IntermediateCodeGenerator();
+                    generator.variableTable = variableTable;
+                    generator.table = functionTable;
+                    generator.generate(parser.tree.root);
+                    outputIntermediate.write(generator.toString());
+                    outputIntermediate.close();
+                    System.out.println("Intermediate Code Generation finished");
+                } catch (IOException e) {
+                    outputIntermediate.close();
+                    inputReader.close();
+                }
             }
-            outputWriterSymbolTable.close();
         }
     }
 }

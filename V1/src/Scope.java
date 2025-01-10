@@ -44,7 +44,7 @@ public class Scope {
 
         Symbol var = new Symbol();
 
-        if (node.type == _TokenType.PROC) {
+        if (node.type == _TokenType.PROC && node.parent.type != _TokenType.CALL) {
             String nameString = "";
 
             for (ASTNode astNode : node.children) {

@@ -1,10 +1,16 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Variable {
+
     String name;
     _TokenType type;
     Integer id;
     Boolean hasValue;
     Boolean notUsed;
+    Boolean initialized;
+    List<Integer> usedAtIds = new ArrayList<>();
 
     public Boolean getHasValue() {
         return hasValue;
@@ -56,5 +62,21 @@ public class Variable {
 
     public void setType(_TokenType type) {
         this.type = type;
+    }
+
+    public Boolean getInitialized() {
+        return initialized;
+    }
+
+    public void setInitialized(Boolean notInitialized) {
+        this.initialized = notInitialized;
+    }
+
+    public List<Integer> getUsedAtIds() {
+        return usedAtIds;
+    }
+
+    public void setUsedAtIds(List<Integer> usedAtIds) {
+        this.usedAtIds = usedAtIds;
     }
 }

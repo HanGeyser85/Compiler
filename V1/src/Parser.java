@@ -401,7 +401,14 @@ public class Parser {
             currentNode = tempNode;
             if (inputTokens.remove().getType() == _TokenType.PROC) {
                 xmlTree += "<PROC>\n";
+                tempNode = new ASTNode("PROC", _TokenType.PROC, ++counter);
+                tempNode.parent = currentNode;
+                currentNode.children.add(tempNode);
+                currentNode = tempNode;
                 DIGITS();
+                if (currentNode.parent != null) {
+                    currentNode = currentNode.parent;
+                }
                 xmlTree += "</PROC>\n";
             } else {
                 throw new RuntimeException("Expected PROC, got " + inputTokens.peek().getType());
@@ -658,6 +665,9 @@ public class Parser {
                         xmlTree += ")\n";
                     } else {
                         throw new RuntimeException("Expected CLOSEPARENTHESIS, got " + inputTokens.peek().getType());
+                    }
+                    if (currentNode.parent != null) {
+                        currentNode = currentNode.parent;
                     }
                     xmlTree += "</NOT>\n";
                 }
@@ -1026,7 +1036,6 @@ public class Parser {
         if (inputTokens.remove().getType() == _TokenType.STRINGV) {
             xmlTree += "<STRINGV>\n";
             tempNode = new ASTNode("STRINGV", _TokenType.STRINGV, ++counter);
-            tempNode.content = inputTokens.peek().getValue();
             tempNode.parent = currentNode;
             currentNode.children.add(tempNode);
             currentNode = tempNode;

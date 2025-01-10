@@ -6,8 +6,9 @@ public class IntermediateCodeGenerator {
 
     sTable symbolTable;
     vTable variableTable;
+    fTable table;
     List<String> output = new ArrayList<>();
-    Integer counter = 0;
+    Integer counter = 1;
     Integer args = 9000;
     Integer[] ifs = {6999, 7000, 7001, 7002, 8000};
     Integer[] whiles = {2999, 3000, 3001, 4000};
@@ -38,78 +39,210 @@ public class IntermediateCodeGenerator {
 
         if (null != node.type) {
             switch (node.type) {
-                case PROGR -> {
-                    for (ASTNode object : node.children) {
-                        generate(object);
-                    }
-                }
-                case ALGO -> {
+                case PROGR, PROCDEFS, ALGO -> {
                     for (ASTNode object : node.children) {
                         generate(object);
                     }
                 }
                 case INSTR -> {
                     for (ASTNode object : node.children) {
-                        generate(object);
+                        generateStat(object);
                     }
                 }
-                case INPUT -> {
+                case PROC -> {
+                    String temp = "";
+                    for (ASTNode object : node.children) {
+                        if (object.type == _TokenType.D) {
+                            temp += object.content;
+                        }
+                    }
+                    output.add(counter++ + " END");
+                    output.add(counter++ + " REM The end is th ensure that the program does not run into the subroutine unless called!");
+                    output.add((Integer.parseInt(temp) + 5000) + " REM " + (Integer.parseInt(temp) + 5000));
+                    generate(node.children.get(1));
                     counter++;
-                    output.add(counter + " INPUT " + generate(node.children.get(0)));
                 }
-                case NUMVAR -> {
-                    if (node.parent.type == _TokenType.INPUT) {
-                        String temp = "";
-                        for (ASTNode object : node.children) {
-                            temp += object.content;
-                        }
+                default -> {
+                }
+            }
+        }
 
-                        return "\"Please input a number: \"; N" + temp;
-                    } else {
-                        String temp = "";
-                        for (ASTNode object : node.children) {
-                            temp += object.content;
-                        }
+        return "";
+    }
 
-                        return "N" + temp;
-                    }
+    public String generateStat(ASTNode node) {
+        if (null != node.type) {
+            switch (node.type) {
+                case INPUT -> {
+                    output.add(counter++ + " INPUT \"Please input a number\"; " + generateExpr(node.children.get(0)));
                 }
                 case OUTPUT -> {
-                    counter++;
-                    output.add(counter + " PRINT " + generate(node.children.get(0)));
-                }
-                case STRINGV -> {
-                    String temp = "";
-                    for (ASTNode object : node.children) {
-                        temp += object.content;
-                    }
-
-                    return "S" + temp + "$";
-                }
-                case BOOLVAR -> {
-                    String temp = "";
-                    for (ASTNode object : node.children) {
-                        temp += object.content;
-                    }
-
-                    return "B" + temp;
+                    output.add(counter++ + " PRINT " + generateExpr(node.children.get(0)));
                 }
                 case ASSIGN -> {
-                    counter++;
-                    output.add(counter + " LET " + generate(node.children.get(0)) + " = " + generate(node.children.get(1)));
-                    if (node.children.get(1).type == _TokenType.LOGIC_OR) {
+                    output.add(counter++ + " LET " + generateExpr(node.children.get(0)) + " = " + generateExpr(node.children.get(1)));
+                }
+                case CALL -> {
+                    output.add(counter++ + " GOSUB " + (Integer.parseInt(lookUpF(table, node.children.get(0).number)) + 5000));
+                }
+                case LOOP -> {
+                    String Lable1 = String.valueOf(whiles[0] += 4);
+                    String Lable2 = String.valueOf(whiles[1] += 4);
+                    String Lable3 = String.valueOf(whiles[2] += 4);
 
-                        counter++;
-                        output.add(counter + " IF " + generate(node.children.get(0)) + " = 2 THEN LET " + generate(node.children.get(0)) + " = 1");
+                    output.add(Lable1 + " REM " + Lable1);
+                    generateCond(node.children.get(0), Lable2, Lable3);
+                    output.add(Lable2 + " REM " + Lable2);
+                    generateStat(node.children.get(1));
+                    output.add(counter++ + " GOTO " + Lable1);
+                    output.add(Lable3 + " REM " + Lable3);
+
+                }
+                case BRANCH -> {
+                    if (node.children.size() == 2) {
+                        String Lable1 = String.valueOf(ifs[0] += 5);
+                        String Lable2 = String.valueOf(ifs[1] += 5);
+
+                        generateCond(node.children.get(0), Lable1, Lable2);
+                        output.add(Lable1 + " REM " + Lable1);
+
+                        generateStat(node.children.get(1));
+                        output.add(Lable2 + " REM " + Lable2);
+                    } else if (node.children.size() == 3) {
+                        String Lable1 = String.valueOf(ifs[0] += 5);
+                        String Lable2 = String.valueOf(ifs[1] += 5);
+                        String Lable3 = String.valueOf(ifs[2] += 5);
+
+                        generateCond(node.children.get(0), Lable1, Lable2);
+                        output.add(Lable1 + " REM " + Lable1);
+
+                        generateStat(node.children.get(1));
+
+                        output.add(counter++ + " GOTO " + Lable3);
+                        output.add(Lable2 + " REM " + Lable2);
+                        generateStat(node.children.get(2));
+                        output.add(Lable3 + " REM " + Lable3);
                     }
+                }
+                case HALT -> {
+                    output.add(counter++ + " RETURN");
+                }
+                default -> {
+                    generate(node);
+                }
+            }
+        }
+
+        return "";
+    }
+
+    public String generateCond(ASTNode node, String LabelT, String LabelF) {
+        if (null != node.type) {
+            switch (node.type) {
+                case LOGIC_FALSE -> {
+                    return counter++ + " GOTO " + LabelT;
+                }
+                case LOGIC_TRUE -> {
+                    return counter++ + " GOTO " + LabelF;
+                }
+                case BOOLVAR -> {
+                    output.add(counter++ + " IF " + generateExpr(node) + " = 1 THEN GOTO " + LabelT);
+                    output.add(counter++ + " GOTO " + LabelF);
+                }
+                case NUMVAR -> {
+                    return generateExpr(node);
+                }
+                case LOGIC_NOT -> {
+                    output.add(generateCond(node.children.get(1), LabelF, LabelT));
+                }
+                case LOGIC_AND -> {
+                    output.add(generateCond(node.children.get(0), String.valueOf(args++), LabelF));
+                    output.add((args - 1) + " REM " + (args - 1));
+                    output.add(generateCond(node.children.get(1), LabelT, LabelF));
+                }
+                case LOGIC_OR -> {
+                    output.add(generateCond(node.children.get(0), LabelT, String.valueOf(args++)));
+                    output.add((args - 1) + " REM " + (args - 1));
+                    output.add(generateCond(node.children.get(1), LabelT, LabelF));
+                }
+                case NUMEXPR_MULTIPLICATION -> {
+                    output.add(generateExpr(node.children.get(0)) + " * " + generateExpr(node.children.get(1)));
+                }
+                case NUMEXPR_ADDITION -> {
+                    output.add(generateExpr(node.children.get(0)) + " + " + generateExpr(node.children.get(1)));
+                }
+                case NUMEXPR_DIVISION -> {
+                    output.add(generateExpr(node.children.get(0)) + " / " + generateExpr(node.children.get(1)));
+                }
+                case CMPR_EQUAL -> {
+                    output.add(counter++ + " IF " + generateExpr(node.children.get(0)) + " = " + generateExpr(node.children.get(1)) + " THEN GOTO " + LabelT);
+                    output.add(counter++ + " GOTO " + LabelF);
+                }
+                case CMPR_GREATERTHAN -> {
+                    output.add(counter++ + " IF " + generateExpr(node.children.get(0)) + " > " + generateExpr(node.children.get(1)) + " THEN GOTO " + LabelT);
+                    output.add(counter++ + " GOTO " + LabelF);
+                }
+                case CMPR_LESSTHAN -> {
+                    output.add(counter++ + " IF " + generateExpr(node.children.get(0)) + " < " + generateExpr(node.children.get(1)) + " THEN GOTO " + LabelT);
+                    output.add(counter++ + " GOTO " + LabelF);
+                }
+                default -> {
+                }
+            }
+        }
+        return "";
+    }
+
+    public String generateExpr(ASTNode node) {
+        if (null != node.type) {
+            switch (node.type) {
+                case LOGIC_FALSE -> {
+                    return "0";
+                }
+                case LOGIC_TRUE -> {
+                    return "1";
+                }
+                case STRI -> {
+                    return node.content;
                 }
                 case DECNUM -> {
-                    if ("0.00".equals(node.content)) {
-                        return "0.00";
-                    } else {
-                        return generate(node.children.get(0));
-                    }
+                    return getValue(node.children.get(0));
                 }
+                case BOOLVAR, NUMVAR, STRINGV -> {
+                    return lookUpV(variableTable, node.number, node.type);
+                }
+                case LOGIC_NOT -> {
+                    return "1 - " + generateExpr(node.children.get(0));
+                }
+                case LOGIC_AND, NUMEXPR_MULTIPLICATION -> {
+                    return generateExpr(node.children.get(0)) + " * " + generateExpr(node.children.get(1));
+                }
+                case LOGIC_OR, NUMEXPR_ADDITION -> {
+                    return generateExpr(node.children.get(0)) + " + " + generateExpr(node.children.get(1));
+                }
+                case CMPR_EQUAL -> {
+                    return generateExpr(node.children.get(0)) + " = " + generateExpr(node.children.get(1));
+                }
+                case CMPR_GREATERTHAN -> {
+                    return generateExpr(node.children.get(0)) + " > " + generateExpr(node.children.get(1));
+                }
+                case CMPR_LESSTHAN -> {
+                    return generateExpr(node.children.get(0)) + " < " + generateExpr(node.children.get(1));
+                }
+                case NUMEXPR_DIVISION -> {
+                    return generateExpr(node.children.get(0)) + " / " + generateExpr(node.children.get(1));
+                }
+                default -> {
+                }
+            }
+        }
+
+        return "";
+    }
+
+    public String getValue(ASTNode node) {
+        if (null != node.type) {
+            switch (node.type) {
                 case NEG -> {
                     return generate(node.children.get(0));
                 }
@@ -130,155 +263,6 @@ public class IntermediateCodeGenerator {
                         return temp;
                     }
                 }
-                case STRI -> {
-                    return node.content;
-                }
-                case LOGIC_TRUE -> {
-                    return "1";
-                }
-                case LOGIC_FALSE -> {
-                    return "0";
-                }
-                case LOGIC_AND -> {
-                    if (node.parent.type == _TokenType.ASSIGN) {
-                        return generate(node.children.get(0)) + " * " + generate(node.children.get(1));
-                    }
-                }
-                case LOGIC_NOT -> {
-                    if (node.parent.type == _TokenType.ASSIGN) {
-                        return "1 - " + generate(node.children.get(0));
-                    }
-                }
-                case LOGIC_OR -> {
-                    if (node.parent.type == _TokenType.ASSIGN) {
-                        return generate(node.children.get(0)) + " + " + generate(node.children.get(1));
-                    }
-                }
-                case HALT -> {
-                    counter++;
-                    output.add(counter + " STOP");
-                }
-                case CMPR_GREATERTHAN -> {
-                    if (null != node.parent.type) {
-                        switch (node.parent.type) {
-                            case ASSIGN -> {
-                                return generate(node.children.get(0)) + " > " + generate(node.children.get(1));
-                            }
-                            case LOOP ->
-                                output.add(whiles[3] + " IF " + generate(node.children.get(0)) + " < " + generate(node.children.get(1)) + " THEN GOTO " + whiles[2].toString());
-                            case BRANCH ->
-                                output.add(ifs[4] + " IF " + generate(node.children.get(0)) + " < " + generate(node.children.get(1)) + " THEN GOTO " + ifs[1].toString());
-                            default -> {
-                            }
-                        }
-                    }
-                }
-                case CMPR_LESSTHAN -> {
-                    if (null != node.parent.type) {
-                        switch (node.parent.type) {
-                            case ASSIGN -> {
-                                return generate(node.children.get(0)) + " < " + generate(node.children.get(1));
-                            }
-                            case LOOP ->
-                                output.add(whiles[3] + " IF " + generate(node.children.get(0)) + " > " + generate(node.children.get(1)) + " THEN GOTO " + whiles[2].toString());
-                            case BRANCH ->
-                                output.add(ifs[4] + " IF " + generate(node.children.get(0)) + " > " + generate(node.children.get(1)) + " THEN GOTO " + ifs[1].toString());
-                            default -> {
-                            }
-                        }
-                    }
-                }
-                case CMPR_EQUAL -> {
-                    if (null != node.parent.type) {
-                        switch (node.parent.type) {
-                            case ASSIGN -> {
-                                return generate(node.children.get(0)) + " = " + generate(node.children.get(1));
-                            }
-                            case LOOP ->
-                                output.add(whiles[3] + " IF " + generate(node.children.get(0)) + " <> " + generate(node.children.get(1)) + " THEN GOTO " + whiles[2].toString());
-                            case BRANCH ->
-                                output.add(ifs[4] + " IF " + generate(node.children.get(0)) + " <> " + generate(node.children.get(1)) + " THEN GOTO " + ifs[1].toString());
-                            default -> {
-                            }
-                        }
-                    }
-                }
-                case LOOP -> {
-                    whiles[0] += 4;
-                    whiles[1] += 4;
-                    whiles[2] += 4;
-                    whiles[3] += 4;
-                    output.add((whiles[0]).toString() + " REM " + whiles[0]);
-                    generateCond(node.children.get(0), whiles[1], whiles[2], whiles[3]);
-                    output.add((whiles[1]).toString() + " REM " + whiles[1]);
-                    generate(node.children.get(1));
-                    counter++;
-                    output.add(counter + " GOTO " + whiles[0].toString());
-                    output.add((whiles[2]).toString() + " REM " + whiles[2]);
-                }
-                case BRANCH -> {
-                    ifs[0] += 5;
-                    ifs[1] += 5;
-                    ifs[2] += 5;
-                    ifs[3] += 5;
-                    ifs[4] += 5;
-                    if (node.children.size() == 2) {
-
-                        generateCond(node.children.get(0), ifs[0], ifs[1], ifs[4]);
-                        output.add((ifs[0]).toString() + " REM " + ifs[0]);
-                        generate(node.children.get(1));
-                        output.add((ifs[1]).toString() + " REM " + ifs[1]);
-                    } else if (node.children.size() == 3) {
-
-                        generateCond(node.children.get(0), ifs[0], ifs[1], ifs[4]);
-                        output.add((ifs[0]).toString() + " REM " + ifs[0]);
-                        generate(node.children.get(1));
-
-                        counter++;
-                        output.add(counter + " GOTO " + ifs[3]);
-                        output.add((ifs[1]).toString() + " REM " + ifs[1]);
-                        generate(node.children.get(2));
-                        output.add((ifs[3]).toString() + " REM " + ifs[3]);
-                    }
-                }
-                case NUMEXPR_ADDITION -> {
-                    return generate(node.children.get(0)) + " + " + generate(node.children.get(1));
-                }
-                case NUMEXPR_DIVISION -> {
-                    return generate(node.children.get(0)) + " / " + generate(node.children.get(1));
-                }
-                case NUMEXPR_MULTIPLICATION -> {
-                    return generate(node.children.get(0)) + " * " + generate(node.children.get(1));
-                }
-                case CALL -> {
-                    String temp = "";
-                    for (ASTNode object : node.children) {
-                        temp += object.content;
-                    }
-                    counter++;
-                    output.add(counter + " GOSUB " + (Integer.parseInt(temp) + 5000));
-                }
-                case PROCDEFS -> {
-                    for (ASTNode object : node.children) {
-                        generate(object);
-                    }
-                }
-                case PROC -> {
-                    String temp = "";
-                    for (ASTNode object : node.children) {
-                        if (object.type == _TokenType.D) {
-                            temp += object.content;
-                        }
-                    }
-                    counter++;
-                    output.add(counter + " END");
-                    counter++;
-                    output.add(counter + " REM The end is th ensure that the program does not run into the subroutine unless called!");
-                    output.add((Integer.parseInt(temp) + 5000) + " REM " + (Integer.parseInt(temp) + 5000));
-                    generate(node.children.get(1));
-                    counter++;
-                    output.add(counter + " RETURN");
-                }
                 default -> {
                 }
             }
@@ -287,61 +271,89 @@ public class IntermediateCodeGenerator {
         return "";
     }
 
-    public String generateCond(ASTNode node, Integer LableT, Integer LableF, Integer LableStart) {
+    public String lookUpV(vTable table, Integer number, _TokenType type) {
+        for (Integer i : table.ids) {
+            Variable tempNumber = table.table.get(i);
+
+            if (tempNumber.id.equals(number) && tempNumber.type == type) {
+                switch (tempNumber.type) {
+                    case NUMVAR -> {
+                        return "N" + table.table.get(i).name;
+                    }
+                    case BOOLVAR -> {
+                        return "B" + table.table.get(i).name;
+                    }
+                    case STRINGV -> {
+                        return "S" + table.table.get(i).name + "$";
+                    }
+                    default -> {
+                    }
+                }
+            }
+
+            if (tempNumber.getUsedAtIds().contains(number) && tempNumber.type == type) {
+                switch (tempNumber.type) {
+                    case NUMVAR -> {
+                        return "N" + table.table.get(i).name;
+                    }
+                    case BOOLVAR -> {
+                        return "B" + table.table.get(i).name;
+                    }
+                    case STRINGV -> {
+                        return "S" + table.table.get(i).name + "$";
+                    }
+                    default -> {
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
+    public String lookUpF(fTable table, Integer number) {
+        for (Integer i : table.ids) {
+            Function tempNumber = table.table.get(i);
+
+            if (tempNumber.id.equals(number)) {
+                return table.table.get(i).name;
+            }
+
+            if (tempNumber.getCalledAtIds().contains(number)) {
+                return table.table.get(i).name;
+            }
+        }
+
+        return "";
+    }
+
+    public String getName(ASTNode node) {
         if (null != node.type) {
             switch (node.type) {
-                case LOGIC_TRUE -> {
-                    counter++;
-                    output.add(counter + " GOTO " + LableT);
+                case NUMVAR -> {
+                    String temp = "";
+                    for (ASTNode object : node.children) {
+                        temp += object.content;
+                    }
+
+                    return temp;
                 }
-                case LOGIC_FALSE -> {
-                    counter++;
-                    output.add(counter + " GOTO " + LableF);
+                case BOOLVAR -> {
+                    String temp = "";
+                    for (ASTNode object : node.children) {
+                        temp += object.content;
+                    }
+
+                    return temp;
                 }
-                case LOGIC_AND -> {
-                    // if ((node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.BOOLVAR)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.LOGIC_TRUE)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.BOOLVAR)
-                    //     ||(node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.LOGIC_TRUE)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.BOOLVAR)
-                    //     ||(node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    //     ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.LOGIC_TRUE)) {
-                    //     output.add(LableStart+" IF ("+generate(node.children.get(0))+" AND "+generate(node.children.get(1))+") AND 0 THEN GOTO "+LableF);
-                    // } else {
-                    Integer temp = args += 10;
-                    generateCond(node.children.get(0), temp, LableF, LableStart);
-                    output.add(temp + " REM " + temp);
-                    generateCond(node.children.get(0), LableT, LableF, LableStart);
-                    // }
+                case STRINGV -> {
+                    String temp = "";
+                    for (ASTNode object : node.children) {
+                        temp += object.content;
+                    }
+
+                    return temp;
                 }
-                case LOGIC_NOT ->
-                    generateCond(node.children.get(0), LableF, LableT, LableStart);
-                case LOGIC_OR -> {
-                    // if ((node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.BOOLVAR)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.LOGIC_TRUE)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.BOOLVAR)
-                    // ||(node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.LOGIC_TRUE)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.BOOLVAR)
-                    // ||(node.children.get(0).type == _TokenType.BOOLVAR && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_TRUE && node.children.get(1).type == _TokenType.LOGIC_FALSE)
-                    // ||(node.children.get(0).type == _TokenType.LOGIC_FALSE && node.children.get(1).type == _TokenType.LOGIC_TRUE)) {
-                    //     output.add(LableStart+" IF ("+generate(node.children.get(0))+" OR "+generate(node.children.get(1))+") AND 0 THEN GOTO "+LableF);
-                    // } else {
-                    Integer temp = args += 10;
-                    generateCond(node.children.get(0), LableT, temp, LableStart);
-                    output.add(temp + " REM " + temp);
-                    generateCond(node.children.get(0), LableT, LableF, LableStart);
-                    // }
-                }
-                case CMPR_GREATERTHAN ->
-                    output.add(LableStart + " IF " + generate(node.children.get(0)) + " < " + generate(node.children.get(1)) + " THEN GOTO " + LableF);
-                case CMPR_LESSTHAN ->
-                    output.add(LableStart + " IF " + generate(node.children.get(0)) + " > " + generate(node.children.get(1)) + " THEN GOTO " + LableF);
-                case CMPR_EQUAL ->
-                    output.add(LableStart + " IF " + generate(node.children.get(0)) + " <> " + generate(node.children.get(1)) + " THEN GOTO " + LableF);
                 default -> {
                 }
             }
@@ -351,6 +363,7 @@ public class IntermediateCodeGenerator {
     }
 
     @Override
+
     public String toString() {
         String temp = "";
         for (String object : output) {
